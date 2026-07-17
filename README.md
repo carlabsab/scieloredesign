@@ -43,8 +43,8 @@ O repositório foi organizado seguindo as boas práticas de desenvolvimento web,
 * **Depois:** Foco minimalista inspirado em ferramentas modernas de busca (SaaS). Um ecossistema limpo com um campo de busca imersivo e cartões geométricos (`icon-box`) para categorização das áreas de conhecimento.
 
 | Interface Original (Antes) | Nova Interface Redesenhada (Depois) |
-| (home-antes.png) | (home-depois.png) |
-|  |  |
+| :---: | :---: |
+| ![Página Inicial Antes](home-antes.png) | ![Página Inicial Depois](home-depois.png) |
 
 > **Justificativa de UI/UX:** A aplicação de uma hierarquia tipográfica clara (`display-6`, `fw-bold`) e o isolamento do motor de busca reduzem a carga cognitiva do usuário, otimizando o fluxo de descoberta científica.
 
