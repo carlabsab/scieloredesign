@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados da Busca - SciELO</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <style>
+        :root { 
+            --text-dark: #1a1a1a; 
+            --bg-gray: #f8f9fa; 
+        }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            color: var(--text-dark); 
+            background-color: var(--bg-gray); 
+            display: flex; 
+            flex-direction: column; 
+            min-height: 100vh; 
+        }
+        
+        /* Ajuste fino permitido pelo requisito: Efeito visual de elevação no hover */
+        .hover-lift {
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .hover-lift:hover { 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05) !important; 
+            transform: translateY(-2px); 
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. Header Global Exclusivo para o components.js -->
+    <header id="global-header" class="bg-white sticky-top shadow-sm"></header>
+
+    <!-- 2. Barra de Abas Secundária (Fora do #global-header para não ser apagada) -->
+    <div class="bg-white border-bottom mb-4">
+        <div class="container-fluid px-4 d-flex flex-wrap justify-content-between align-items-end">
+            <!-- Abas usando componente nativo nav-underline -->
+            <ul class="nav nav-underline flex-nowrap overflow-auto" id="searchTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active px-3 py-3 text-secondary fw-medium" id="artigos-tab" data-bs-toggle="tab" data-bs-target="#artigos-pane" type="button" role="tab" aria-controls="artigos-pane" aria-selected="true">Artigos</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link px-3 py-3 text-secondary fw-medium" id="autores-tab" data-bs-toggle="tab" data-bs-target="#autores-pane" type="button" role="tab" aria-controls="autores-pane" aria-selected="false">Autores</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link px-3 py-3 text-secondary fw-medium" id="periodicos-tab" data-bs-toggle="tab" data-bs-target="#periodicos-pane" type="button" role="tab" aria-controls="periodicos-pane" aria-selected="false">Periódicos</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link px-3 py-3 text-secondary fw-medium" id="livros-tab" data-bs-toggle="tab" data-bs-target="#livros-pane" type="button" role="tab" aria-controls="livros-pane" aria-selected="false">Livros</button>
+                </li>
+            </ul>
+            <div class="pb-2 d-none d-md-flex gap-3">
+                <a href="#" class="text-secondary text-decoration-none small fw-medium"><i class="bi bi-bookmark" aria-hidden="true"></i> Salvar busca</a>
+                <a href="#" class="text-secondary text-decoration-none small fw-medium"><i class="bi bi-bell-plus" aria-hidden="true"></i> Criar alerta</a>
+            </div>
+        </div>
+    </div>
+
+    <main class="container-fluid px-4 flex-grow-1">
+        <div class="row g-4">
+            
+            <!-- Sidebar de Filtros -->
+            <aside class="col-lg-3 d-none d-lg-block" aria-labelledby="filtros-titulo">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h2 id="filtros-titulo" class="fs-6 fw-bold m-0">Filtros</h2>
+                    <button type="reset" class="btn btn-link text-decoration-none text-primary p-0 small fw-medium" form="accordionFiltros">Limpar todos</button>
+                </div>
+                
+                <form class="accordion accordion-flush border rounded-3 bg-white overflow-hidden shadow-sm" id="accordionFiltros">
+                    
+                    <fieldset class="accordion-item">
+                        <legend class="visually-hidden">Filtro por Ano de Publicação</legend>
+                        <h3 class="accordion-header">
+                            <button class="accordion-button py-3 fw-semibold fs-6 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#filtroAno" aria-expanded="true">
+                                Ano de publicação
+                            </button>
+                        </h3>
+                        <div id="filtroAno" class="accordion-collapse collapse show">
+                            <div class="accordion-body pt-0 pb-3">
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" value="2024" id="ano2024" checked>
+                                    <label class="form-check-label small d-flex justify-content-between w-100" for="ano2024">
+                                        2024 <span class="text-muted">45</span>
+                                    </label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" value="2023" id="ano2023">
+                                    <label class="form-check-label small d-flex justify-content-between w-100" for="ano2023">
+                                        2023 <span class="text-muted">128</span>
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="2022" id="ano2022">
+                                    <label class="form-check-label small d-flex justify-content-between w-100" for="ano2022">
+                                        2022 <span class="text-muted">89</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="accordion-item">
+                        <legend class="visually-hidden">Filtro por Idioma</legend>
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed py-3 fw-semibold fs-6 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#filtroIdioma" aria-expanded="false">
+                                Idioma
+                            </button>
+                        </h3>
+                        <div id="filtroIdioma" class="accordion-collapse collapse">
+                            <div class="accordion-body pt-0 pb-3">
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" value="pt" id="idiomaPt">
+                                    <label class="form-check-label small d-flex justify-content-between w-100" for="idiomaPt">Português <span class="text-muted">950</span></label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" value="en" id="idiomaEn">
+                                    <label class="form-check-label small d-flex justify-content-between w-100" for="idiomaEn">Inglês <span class="text-muted">250</span></label>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                    
+                    <div class="p-3 bg-light border-top text-center">
+                        <button type="submit" class="btn btn-outline-primary btn-sm w-100 rounded-pill fw-medium">Aplicar filtros</button>
+                    </div>
+                </form>
+            </aside>
+
+            <!-- Área de Resultados / Conteúdo das Abas -->
+            <section class="col-lg-9 mb-5" aria-labelledby="resultados-titulo">
+                
+                <div class="tab-content" id="searchTabsContent">
+                    
+                    <!-- CONTEÚDO DA ABA 1: ARTIGOS -->
+                    <div class="tab-pane fade show active" id="artigos-pane" role="tabpanel" aria-labelledby="artigos-tab" tabindex="0">
+                        
+                        <header class="d-flex justify-content-between align-items-center mb-4">
+                            <h2 id="resultados-titulo" class="fs-5 fw-bold m-0">1.234 resultados</h2>
+                            
+                            <div class="d-flex align-items-center gap-2">
+                                <label for="ordenarPor" class="small text-muted text-nowrap d-none d-sm-block">Ordenar por:</label>
+                                <select class="form-select form-select-sm border-0 bg-transparent fw-medium shadow-none" id="ordenarPor" aria-label="Ordenar resultados">
+                                    <option value="relevantes" selected>Mais relevantes</option>
+                                    <option value="recentes">Mais recentes</option>
+                                    <option value="citados">Mais citados</option>
+                                </select>
+                            </div>
+                        </header>
+
+                        <div class="d-flex flex-column gap-3">
+                            <!-- Card de Artigo 1 -->
+                            <article class="card border-0 bg-white p-4 shadow-sm hover-lift rounded-4">
+                                <header class="d-flex justify-content-between align-items-start mb-2">
+                                    <div class="d-flex gap-2 align-items-center mb-1">
+                                        <!-- Badge refatorado com Bootstrap Nativo -->
+                                        <span class="badge text-success bg-success-subtle border border-success-subtle rounded-pill small fw-bold"><i class="bi bi-unlock-fill" aria-hidden="true"></i> ACESSO ABERTO</span>
+                                        <span class="text-muted small text-uppercase fw-semibold" style="font-size: 0.7rem;">Artigo Original</span>
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <!-- Botões refatorados com Bootstrap Nativo -->
+                                        <a href="#" class="btn btn-outline-secondary border-secondary-subtle btn-sm rounded d-flex align-items-center gap-1" aria-label="Baixar PDF"><i class="bi bi-file-earmark-pdf text-danger" aria-hidden="true"></i> <span class="d-none d-md-inline">PDF</span></a>
+                                        <a href="#" class="btn btn-outline-secondary border-secondary-subtle btn-sm rounded d-flex align-items-center gap-1" aria-label="Acessar DOI"><i class="bi bi-link-45deg" aria-hidden="true"></i> <span class="d-none d-md-inline">DOI</span></a>
+                                    </div>
+                                </header>
+                                
+                                <h3 class="fs-5 fw-bold mb-1">
+                                    <a href="artigo.html" class="text-decoration-none text-dark text-primary-hover">Information literacy in school: a systematic review</a>
+                                </h3>
+                                <address class="text-muted small mb-2 fst-normal">
+                                    Maria C. F. de Oliveira, João P. A. da Silva, Ana L. Costa
+                                </address>
+                                <p class="text-secondary small mb-3">Ciência da Informação, <time datetime="2024">2024</time>, v.53</p>
+                                
+                                <p class="text-dark small mb-3 lh-base">
+                                    This article analyzes the concept of <mark class="bg-warning-subtle px-1 rounded">information</mark> literacy in <mark class="bg-warning-subtle px-1 rounded">school</mark> environments and presents an overview of the main studies published between 2015 and 2023...
+                                </p>
+                                
+                                <footer class="d-flex justify-content-between align-items-center mt-auto border-top pt-3">
+                                    <div class="d-flex gap-3 text-muted small">
+                                        <span title="Visualizações"><i class="bi bi-eye" aria-hidden="true"></i> 2.345</span>
+                                        <span title="Citações"><i class="bi bi-quote" aria-hidden="true"></i> 123</span>
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <button type="button" class="btn btn-link text-secondary p-0 btn-salvar" aria-label="Salvar artigo"><i class="bi bi-bookmark fs-5" aria-hidden="true"></i></button>
+                                        <button type="button" class="btn btn-link text-secondary p-0" aria-label="Compartilhar artigo"><i class="bi bi-share fs-5" aria-hidden="true"></i></button>
+                                    </div>
+                                </footer>
+                            </article>
+                        </div>
+                    </div>
+
+                    <!-- CONTEÚDO DA ABA 2: AUTORES -->
+                    <div class="tab-pane fade" id="autores-pane" role="tabpanel" aria-labelledby="autores-tab" tabindex="0">
+                        <div class="card border-0 shadow-sm p-5 text-center text-muted bg-white rounded-4">
+                            <i class="bi bi-people display-4 mb-3" aria-hidden="true"></i>
+                            <p class="lead fw-medium m-0">Funcionalidade de busca por autores em desenvolvimento.</p>
+                        </div>
+                    </div>
+
+                    <!-- CONTEÚDO DA ABA 3: PERIÓDICOS -->
+                    <div class="tab-pane fade" id="periodicos-pane" role="tabpanel" aria-labelledby="periodicos-tab" tabindex="0">
+                        <div class="card border-0 shadow-sm p-5 text-center text-muted bg-white rounded-4">
+                            <i class="bi bi-journals display-4 mb-3" aria-hidden="true"></i>
+                            <p class="lead fw-medium m-0">Nenhum periódico listado nesta busca.</p>
+                        </div>
+                    </div>
+
+                    <!-- CONTEÚDO DA ABA 4: LIVROS -->
+                    <div class="tab-pane fade" id="livros-pane" role="tabpanel" aria-labelledby="livros-tab" tabindex="0">
+                        <div class="card border-0 shadow-sm p-5 text-center text-muted bg-white rounded-4">
+                            <i class="bi bi-book display-4 mb-3" aria-hidden="true"></i>
+                            <p class="lead fw-medium m-0">Nenhum livro encontrado.</p>
+                        </div>
+                    </div>
+
+                </div> <!-- Fim tab-content -->
+            </section>
+        </div>
+    </main>
+
+    <!-- Elemento Footer adicionado para permitir injeção do JS -->
+    <footer id="global-footer" class="bg-dark text-white pt-5 pb-3 mt-auto"></footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // Lógica para o botão de "Salvar" (Favoritar) o artigo
+            const botoesSalvar = document.querySelectorAll('.btn-salvar');
+
+            botoesSalvar.forEach(botao => {
+                botao.addEventListener('click', function() {
+                    const icone = this.querySelector('i');
+                    
+                    if (icone.classList.contains('bi-bookmark')) {
+                        icone.classList.remove('bi-bookmark');
+                        icone.classList.add('bi-bookmark-fill', 'text-primary');
+                    } else {
+                        icone.classList.remove('bi-bookmark-fill', 'text-primary');
+                        icone.classList.add('bi-bookmark');
+                    }
+                });
+            });
+
+            // Evitar recarregamento do formulário de filtros vazio
+            const formFiltros = document.getElementById('accordionFiltros');
+            if(formFiltros) {
+                formFiltros.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    alert("Filtros aplicados com sucesso! A lista será recarregada.");
+                });
+            }
+        });
+    </script>
+    <script src="components.js"></script>
+</body>
+</html>

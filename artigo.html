@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temporal behavior of proportional mortality of fetal deaths - SciELO</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <style>
+        :root { 
+            --text-dark: #1a1a1a; 
+            --bg-gray: #f8f9fa; 
+            --scielo-blue: #0d6efd;
+        }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            color: var(--text-dark); 
+            background-color: var(--bg-gray); 
+            display: flex; 
+            flex-direction: column; 
+            min-height: 100vh; 
+        }
+        
+        /* Layout e Barra de Ações */
+        .action-bar { background-color: #ffffff; border-bottom: 1px solid #e9ecef; }
+        .btn-action-outline { border-color: #e0e0e0; color: #5f6368; font-weight: 500; transition: all 0.2s; }
+        .btn-action-outline:hover { background-color: #f1f3f4; color: var(--text-dark); }
+        
+        /* Badges de Status do Artigo */
+        .badge-open-access { background-color: #e6f4ea; color: #137333; font-weight: 600; }
+        
+        /* Estilização de Abas (Tabs) */
+        .article-tabs .nav-link { color: #6c757d; font-weight: 500; border: none; border-bottom: 2px solid transparent; }
+        .article-tabs .nav-link.active { color: var(--scielo-blue); border-bottom-color: var(--scielo-blue); background: transparent; }
+        
+        /* Ajustes de Leitura */
+        .article-body p { line-height: 1.8; font-size: 1.05rem; color: #333; text-align: justify; }
+        
+        /* Cards Laterais Estilo SaaS */
+        .aside-card { border: none; border-radius: 12px; }
+        
+        /* Toast flutuante customizado para JS */
+        .toast-container-custom { position: fixed; bottom: 20px; right: 20px; z-index: 1055; }
+    </style>
+</head>
+<body>
+
+    <header class="bg-white border-bottom shadow-sm">
+        <nav class="navbar navbar-expand-lg py-2" aria-label="Navegação Principal">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+                    <i class="bi bi-bezier2 text-primary fs-4" aria-hidden="true"></i>
+                    <span class="fs-5 fw-bold text-primary">SciELO</span>
+                </a>
+                
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#menuArtigo" aria-controls="menuArtigo" aria-expanded="false" aria-label="Menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <div class="collapse navbar-collapse" id="menuArtigo">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0 fw-medium">
+                        <li class="nav-item"><a class="nav-link px-3" href="index.html">Home</a></li>
+                        <li class="nav-item"><a class="nav-link px-3" href="resultados.html">Busca</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <nav class="action-bar py-3" aria-label="Ações rápidas do artigo">
+            <div class="container d-flex flex-wrap justify-content-between align-items-center gap-3">
+                <a href="resultados.html" class="btn btn-link text-decoration-none text-secondary p-0 fw-medium">
+                    <i class="bi bi-chevron-left" aria-hidden="true"></i> Voltar aos resultados
+                </a>
+                
+                <div class="d-flex gap-2 flex-wrap">
+                    <a href="#" class="btn btn-action-outline btn-sm rounded-pill px-3"><i class="bi bi-file-earmark-pdf text-danger" aria-hidden="true"></i> PDF</a>
+                    <a href="#" class="btn btn-action-outline btn-sm rounded-pill px-3"><i class="bi bi-code-slash" aria-hidden="true"></i> XML</a>
+                    <button type="button" id="btnCompartilhar" class="btn btn-action-outline btn-sm rounded-pill px-3"><i class="bi bi-share" aria-hidden="true"></i> Compartilhar</button>
+                    <button type="button" class="btn btn-action-outline btn-sm rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#modalCitar"><i class="bi bi-quote" aria-hidden="true"></i> Citar</button>
+                    <button type="button" id="btnSalvarArtigo" class="btn btn-action-outline btn-sm rounded-pill px-3"><i class="bi bi-bookmark" aria-hidden="true"></i> Salvar</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container py-5 flex-grow-1">
+        <div class="row g-4">
+            
+            <article class="col-lg-8" lang="en">
+                <header class="bg-white p-4 rounded-4 shadow-sm mb-4">
+                    <div class="d-flex gap-2 align-items-center mb-3">
+                        <span class="badge badge-open-access rounded-pill"><i class="bi bi-unlock-fill" aria-hidden="true"></i> ACESSO ABERTO</span>
+                        <span class="text-muted small text-uppercase fw-bold" style="font-size: 0.75rem;">Artigo Original</span>
+                    </div>
+                    
+                    <h1 class="fw-bold fs-3 text-dark mb-2">Temporal behavior of proportional mortality of fetal deaths according to underlying cause, 2011–2020</h1>
+                    <p class="text-muted fs-5 mb-4">Comportamento temporal da mortalidade proporcional dos óbitos fetais segundo causa básica, 2011–2020</p>
+                    
+                    <address class="mb-4 fst-normal">
+                        <ul class="list-inline m-0 mb-2">
+                            <li class="list-inline-item fw-semibold text-primary">Ana L. C. Silva <a href="#afil-1" class="text-decoration-none"><sup>1</sup></a></li>
+                            <li class="list-inline-item fw-semibold text-primary">Carlos M. R. de Oliveira <a href="#afil-2" class="text-decoration-none"><sup>2</sup></a></li>
+                        </ul>
+                        
+                        <ol class="list-unstyled text-muted small m-0" style="font-size: 0.85rem;">
+                            <li id="afil-1"><sup>1</sup> Universidade Federal da Paraíba, João Pessoa, Brasil.</li>
+                            <li id="afil-2"><sup>2</sup> Ministério da Saúde, Departamento de Análise de Saúde, Brasília, Brasil.</li>
+                        </ol>
+                    </address>
+
+                    <footer class="d-flex flex-wrap justify-content-between align-items-center text-muted small pt-3 border-top">
+                        <p class="m-0">Revista de Saúde Pública, 2023, v.57, e057001</p>
+                        <a href="https://doi.org/10.11606/s1518-8787.2023057001" target="_blank" class="text-decoration-none text-secondary">https://doi.org/10.11606/s1518-8787.2023057001</a>
+                    </footer>
+                </header>
+
+                <nav aria-label="Seções do artigo">
+                    <ul class="nav nav-tabs article-tabs border-0" id="abasArtigo" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active py-3" id="resumo-tab" data-bs-toggle="tab" data-bs-target="#resumo-painel" type="button" role="tab" aria-controls="resumo-painel" aria-selected="true">Resumo</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link py-3" id="abstract-tab" data-bs-toggle="tab" data-bs-target="#abstract-painel" type="button" role="tab" aria-controls="abstract-painel" aria-selected="false">Abstract</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link py-3" id="texto-tab" data-bs-toggle="tab" data-bs-target="#texto-painel" type="button" role="tab" aria-controls="texto-painel" aria-selected="false">Texto Completo</button>
+                        </li>
+                    </ul>
+                </nav>
+
+                <div class="tab-content bg-white p-4 rounded-bottom-4 shadow-sm border border-top-0 mb-5">
+                    
+                    <section class="tab-pane fade show active" id="resumo-painel" role="tabpanel" aria-labelledby="resumo-tab">
+                        <h2 class="fs-5 fw-bold mb-3">Resumo</h2>
+                        <div class="article-body">
+                            <p><strong>Objetivo:</strong> Analisar a tendência temporal da mortalidade proporcional dos óbitos fetais ocorridos no Brasil segundo causa básica de óbito no período de 2011 a 2020.</p>
+                            <p><strong>Métodos:</strong> Estudo ecológico de série temporal utilizando dados do Sistema de Informações sobre Mortalidade (SIM). As causas básicas foram agrupadas de acordo com a Classificação Internacional de Doenças (CID-10).</p>
+                            <p><strong>Resultados:</strong> Observou-se uma redução das mortes fetais por causas evitáveis, porém as afecções originadas no período perinatal continuam representando a maior proporção dos óbitos fetais no território nacional.</p>
+                        </div>
+                    </section>
+
+                    <section class="tab-pane fade" id="abstract-painel" role="tabpanel" aria-labelledby="abstract-tab">
+                        <h2 class="fs-5 fw-bold mb-3">Abstract</h2>
+                        <div class="article-body">
+                            <p><strong>Objective:</strong> To analyze the temporal trend of proportional mortality of fetal deaths occurring in Brazil according to underlying cause of death from 2011 to 2020.</p>
+                            <p><strong>Methods:</strong> Ecological time-series study using data from the Mortality Information System (SIM). Underlying causes were grouped according to the International Classification of Diseases (ICD-10).</p>
+                            <p><strong>Results:</strong> A reduction in fetal deaths due to preventable causes was observed, but conditions originating in the perinatal period still account for the highest proportion of fetal deaths in Brazil.</p>
+                        </div>
+                    </section>
+
+                    <section class="tab-pane fade" id="texto-painel" role="tabpanel" aria-labelledby="texto-tab">
+                        <h2 class="fs-5 fw-bold mb-3">Introdução</h2>
+                        <div class="article-body">
+                            <p>A mortalidade fetal é um indicador sensível das condições de saúde socioeconômicas e da qualidade da assistência pré-natal e ao parto. Apesar dos avanços tecnológicos na medicina perinatal nas últimas décadas, os óbitos fetais continuam sendo um desafio de saúde pública global...</p>
+                        </div>
+                    </section>
+                </div>
+            </article>
+
+            <aside class="col-lg-4" aria-label="Informações acessórias do artigo">
+                
+                <section class="card aside-card shadow-sm p-4 bg-white mb-4">
+                    <h2 class="fs-6 fw-bold mb-3"><i class="bi bi-download text-primary" aria-hidden="true"></i> Downloads</h2>
+                    <ul class="list-unstyled m-0">
+                        <li class="d-flex justify-content-between py-2 border-bottom small">
+                            <span><i class="bi bi-filetype-pdf text-danger" aria-hidden="true"></i> PDF (Português)</span>
+                            <span class="text-muted fw-semibold">12.345</span>
+                        </li>
+                        <li class="d-flex justify-content-between py-2 border-bottom small">
+                            <span><i class="bi bi-filetype-pdf text-danger" aria-hidden="true"></i> PDF (English)</span>
+                            <span class="text-muted fw-semibold">4.890</span>
+                        </li>
+                        <li class="d-flex justify-content-between py-2 small pt-2">
+                            <span><i class="bi bi-filetype-xml text-warning" aria-hidden="true"></i> XML</span>
+                            <span class="text-muted fw-semibold">123</span>
+                        </li>
+                    </ul>
+                </section>
+
+                <section class="card aside-card shadow-sm p-4 bg-white mb-4">
+                    <h2 class="fs-6 fw-bold mb-3"><i class="bi bi-graph-up text-primary" aria-hidden="true"></i> Métricas de Impacto</h2>
+                    <dl class="row m-0 g-2 text-center small">
+                        <div class="col-6 bg-light p-3 rounded-3">
+                            <dt class="fs-4 fw-bold text-dark m-0">17.235</dt>
+                            <dd class="text-muted m-0">Acessos</dd>
+                        </div>
+                        <div class="col-6 bg-light p-3 rounded-3">
+                            <dt class="fs-4 fw-bold text-dark m-0">145</dt>
+                            <dd class="text-muted m-0">Citações</dd>
+                        </div>
+                    </dl>
+                </section>
+
+                <section class="card aside-card shadow-sm p-4 bg-white">
+                    <h2 class="fs-6 fw-bold mb-3"><i class="bi bi-calendar3 text-primary" aria-hidden="true"></i> Histórico do Artigo</h2>
+                    <ul class="list-unstyled small m-0">
+                        <li class="py-2 border-bottom d-flex justify-content-between">
+                            <span>Submetido em:</span>
+                            <time datetime="2022-11-14" class="fw-medium">14 Nov 2022</time>
+                        </li>
+                        <li class="py-2 border-bottom d-flex justify-content-between">
+                            <span>Aceito em:</span>
+                            <time datetime="2023-04-10" class="fw-medium">10 Abr 2023</time>
+                        </li>
+                        <li class="py-2 d-flex justify-content-between">
+                            <span>Publicado em:</span>
+                            <time datetime="2023-06-15" class="fw-medium">15 Jun 2023</time>
+                        </li>
+                    </ul>
+                </section>
+                
+            </aside>
+        </div>
+    </main>
+
+    <footer class="bg-dark text-white pt-5 pb-3 mt-auto">
+        <div class="container">
+            <div class="row gy-4 mb-4">
+                <address class="col-lg-4 text-secondary small fst-normal lh-lg mb-0">
+                    <h4 class="fs-4 fw-bold text-primary mb-3"><i class="bi bi-bezier2" aria-hidden="true"></i> SciELO</h4>
+                    <strong>Scientific Electronic Library Online</strong><br>
+                    Rua Dr. Diogo de Faria, 1087 – 9º andar<br>
+                    Vila Clementino, São Paulo/SP - Brasil<br>
+                    CEP: 04037-003
+                </address>
+                <div class="col-lg-8">
+                    <p class="text-secondary small">Redesign acadêmico baseado na infraestrutura de periódicos científicos SciELO.</p>
+                </div>
+            </div>
+            <hr class="border-secondary mb-4">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center text-secondary small">
+                <p class="m-0">&copy; 2026 SciELO. Desenvolvido para fins didáticos.</p>
+            </div>
+        </div>
+    </footer>
+
+    <div class="modal fade" id="modalCitar" tabindex="-1" aria-labelledby="modalCitarLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-light border-0">
+                    <h5 class="modal-title fw-bold" id="modalCitarLabel">Como Citar este Artigo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <h6 class="text-uppercase text-secondary small fw-bold mb-2">Padrão ABNT</h6>
+                    <blockquote id="citacaoTexto" class="bg-light p-3 rounded-3 border small mb-3">
+                        SILVA, Ana L. C.; OLIVEIRA, Carlos M. R. de. Temporal behavior of proportional mortality of fetal deaths according to underlying cause, 2011–2020. Revista de Saúde Pública, v. 57, e057001, 2023.
+                    </blockquote>
+                    <button type="button" id="btnCopiarCitacao" class="btn btn-primary w-100 rounded-pill fw-semibold py-2">
+                        <i class="bi bi-clipboard" aria-hidden="true"></i> Copiar Citação
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container-custom">
+        <div id="toastCopiar" class="toast align-items-center text-white bg-dark border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
+            <div class="d-flex">
+                <div class="toast-body d-flex align-items-center gap-2">
+                    <i class="bi bi-check-circle-fill text-success" aria-hidden="true"></i>
+                    <span id="toastMensagem">Copiado com sucesso!</span>
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Fechar"></button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // 1. Inicializando Componentes de Notificação do Bootstrap
+            const toastElemento = document.getElementById('toastCopiar');
+            const toastBootstrap = new bootstrap.Toast(toastElemento);
+            const toastMensagem = document.getElementById('toastMensagem');
+            
+            // 2. Lógica JavaScript para Copiar Citação (Modal)
+            const btnCopiar = document.getElementById('btnCopiarCitacao');
+            const citacaoTexto = document.getElementById('citacaoTexto');
+
+            if (btnCopiar && citacaoTexto) {
+                btnCopiar.addEventListener('click', () => {
+                    // Copia o texto da tag blockquote para a área de transferência usando a API Moderna
+                    navigator.clipboard.writeText(citacaoTexto.innerText.trim())
+                        .then(() => {
+                            // Feedback Visual no próprio botão
+                            btnCopiar.innerHTML = '<i class="bi bi-check-lg" aria-hidden="true"></i> Citação Copiada!';
+                            btnCopiar.classList.replace('btn-primary', 'btn-success');
+                            
+                            // Dispara a Notificação (Toast) flutuante
+                            toastMensagem.innerText = "Citação copiada no padrão ABNT!";
+                            toastBootstrap.show();
+
+                            // Retorna o botão ao estado original após 2.5 segundos
+                            setTimeout(() => {
+                                btnCopiar.innerHTML = '<i class="bi bi-clipboard" aria-hidden="true"></i> Copiar Citação';
+                                btnCopiar.classList.replace('btn-success', 'btn-primary');
+                            }, 2500);
+                        })
+                        .catch(erro => {
+                            console.error("Falha ao copiar citação: ", erro);
+                        });
+                });
+            }
+
+            // 3. Lógica JavaScript para Compartilhar (Barra de Ações)
+            const btnCompartilhar = document.getElementById('btnCompartilhar');
+            if (btnCompartilhar) {
+                btnCompartilhar.addEventListener('click', () => {
+                    // Copia a URL atual do navegador ou o DOI
+                    const urlArtigo = window.location.href;
+                    
+                    navigator.clipboard.writeText(urlArtigo)
+                        .then(() => {
+                            toastMensagem.innerText = "Link do artigo copiado para a área de transferência!";
+                            toastBootstrap.show();
+                        })
+                        .catch(err => console.error("Erro ao compartilhar: ", err));
+                });
+            }
+
+            // 4. Lógica Interativa: Botão de Salvar Artigo (Favorito)
+            const btnSalvar = document.getElementById('btnSalvarArtigo');
+            if (btnSalvar) {
+                btnSalvar.addEventListener('click', function() {
+                    const icone = this.querySelector('i');
+                    if (icone.classList.contains('bi-bookmark')) {
+                        icone.classList.replace('bi-bookmark', 'bi-bookmark-fill');
+                        this.classList.add('text-primary');
+                        toastMensagem.innerText = "Artigo adicionado aos seus favoritos!";
+                        toastBootstrap.show();
+                    } else {
+                        icone.classList.replace('bi-bookmark-fill', 'bi-bookmark');
+                        this.classList.remove('text-primary');
+                        toastMensagem.innerText = "Artigo removido dos seus favoritos.";
+                        toastBootstrap.show();
+                    }
+                });
+            }
+        });
+    </script>
+    <script src="components.js"></script>
+</body>
+</html>
