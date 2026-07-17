@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minha Biblioteca - SciELO</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <style>
+        :root { 
+            --text-dark: #1a1a1a; 
+            --bg-gray: #f4f6f8; 
+            --scielo-blue: #0d6efd;
+            --sidebar-bg: #ffffff;
+        }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            color: var(--text-dark); 
+            background-color: var(--bg-gray); 
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header e Busca Central */
+        .navbar-custom { background-color: #ffffff; border-bottom: 1px solid #e9ecef; }
+        .search-wrapper { position: relative; max-width: 600px; width: 100%; }
+        .search-wrapper input { padding-left: 2.5rem; border-radius: 50px; background-color: var(--bg-gray); border: none; }
+        .search-wrapper input:focus { background-color: #fff; border: 1px solid var(--scielo-blue); box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15); }
+        .search-wrapper .bi-search { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #6c757d; }
+        .search-wrapper .btn-search { position: absolute; right: 4px; top: 4px; bottom: 4px; border-radius: 50px; padding: 0 1.5rem; }
+
+        /* Sidebar Navigation */
+        .sidebar-nav { background-color: var(--sidebar-bg); border-right: 1px solid #e9ecef; height: calc(100vh - 73px); position: sticky; top: 73px; overflow-y: auto; }
+        .nav-link-sidebar { color: #495057; font-weight: 500; padding: 0.8rem 1.5rem; display: flex; align-items: center; gap: 0.75rem; border-radius: 0 25px 25px 0; margin-right: 1rem; transition: all 0.2s; }
+        .nav-link-sidebar:hover { background-color: #f8f9fa; color: var(--scielo-blue); }
+        .nav-link-sidebar.active { background-color: #f0f6ff; color: var(--scielo-blue); font-weight: 600; }
+        .nav-link-sidebar i { font-size: 1.2rem; }
+
+        /* Lista de Artigos (List-Group Customizado) */
+        .article-list-item { background: #ffffff; border: 1px solid #e9ecef; border-radius: 12px !important; margin-bottom: 0.75rem; transition: border-color 0.2s, box-shadow 0.2s; }
+        .article-list-item:hover { border-color: #cdd4db; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+        .article-list-item.selected { background-color: #f8faff; border-color: #b6d4fe; }
+        
+        .badge-open-access { background-color: #e6f4ea; color: #137333; font-weight: 600; font-size: 0.7rem; letter-spacing: 0.5px; }
+        .form-check-input { cursor: pointer; width: 1.2em; height: 1.2em; }
+        
+        /* Botões de Ação na Toolbar */
+        .toolbar-btn { color: #495057; font-weight: 500; font-size: 0.9rem; padding: 0.4rem 0.8rem; border-radius: 6px; transition: all 0.2s; }
+        .toolbar-btn:hover { background-color: #e9ecef; color: var(--text-dark); }
+        .toolbar-btn.text-danger:hover { background-color: #fef0f0; color: #dc3545 !important; }
+    </style>
+</head>
+<body>
+
+    <header class="navbar-custom sticky-top">
+        <div class="container-fluid px-4 py-3 d-flex align-items-center justify-content-between gap-3">
+            
+            <div class="d-flex align-items-center gap-3">
+                <button class="btn btn-light d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMobile" aria-controls="sidebarMobile" aria-label="Abrir menu">
+                    <i class="bi bi-list fs-4" aria-hidden="true"></i>
+                </button>
+                <a class="navbar-brand d-flex align-items-center gap-2 m-0" href="index.html">
+                    <i class="bi bi-bezier2 text-primary fs-3" aria-hidden="true"></i>
+                    <span class="fs-4 fw-bold text-primary d-none d-sm-block">SciELO</span>
+                </a>
+            </div>
+
+            <form class="search-wrapper d-none d-md-block" role="search">
+                <i class="bi bi-search" aria-hidden="true"></i>
+                <input type="search" class="form-control form-control-lg fs-6" placeholder="Buscar artigos, autores, periódicos..." aria-label="Pesquisar">
+                <button type="submit" class="btn btn-primary btn-search fw-medium">Pesquisar</button>
+            </form>
+
+            <div class="d-flex align-items-center gap-2 gap-sm-3">
+                <a href="#" class="btn btn-outline-primary rounded-pill px-3 fw-medium d-none d-sm-inline-block">Entrar</a>
+                <button class="btn btn-light rounded-circle" type="button" aria-label="Menu de aplicativos">
+                    <i class="bi bi-grid-3x3-gap-fill text-secondary" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container-fluid flex-grow-1 d-flex p-0">
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebarMobile" aria-labelledby="sidebarMobileLabel">
+            <div class="offcanvas-header border-bottom">
+                <h5 class="offcanvas-title fw-bold text-primary d-flex align-items-center gap-2" id="sidebarMobileLabel"><i class="bi bi-bezier2" aria-hidden="true"></i> SciELO</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fechar"></button>
+            </div>
+            <div class="offcanvas-body p-0 py-4">
+                <h2 class="fs-6 fw-bold text-muted text-uppercase px-4 mb-3">Minha Biblioteca</h2>
+                <ul class="list-unstyled m-0 d-flex flex-column gap-1">
+                    <li><a href="#" class="text-decoration-none nav-link-sidebar active"><i class="bi bi-journal-bookmark" aria-hidden="true"></i> Artigos salvos</a></li>
+                    <li><a href="#" class="text-decoration-none nav-link-sidebar"><i class="bi bi-search" aria-hidden="true"></i> Buscas salvas</a></li>
+                    <li><a href="#" class="text-decoration-none nav-link-sidebar"><i class="bi bi-bell" aria-hidden="true"></i> Alertas</a></li>
+                    <li><a href="#" class="text-decoration-none nav-link-sidebar"><i class="bi bi-clock-history" aria-hidden="true"></i> Histórico</a></li>
+                    <li><a href="#" class="text-decoration-none nav-link-sidebar"><i class="bi bi-folder2-open" aria-hidden="true"></i> Coleções</a></li>
+                    <li><a href="#" class="text-decoration-none nav-link-sidebar mt-3"><i class="bi bi-gear" aria-hidden="true"></i> Configurações</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <main class="col-12 col-lg-9 col-xl-10 p-4 p-md-5">
+            <div class="mx-auto" style="max-width: 1000px;">
+                
+                <header class="mb-4">
+                    <h1 class="fs-3 fw-bold mb-1">Artigos salvos</h1>
+                    <p class="text-secondary fw-medium" id="contadorArtigos">3 artigos</p>
+                </header>
+
+                <div class="bg-white p-3 rounded-3 shadow-sm border mb-4 d-flex flex-wrap justify-content-between align-items-center gap-3" role="toolbar" aria-label="Barra de ferramentas de artigos">
+                    
+                    <div class="d-flex align-items-center gap-3 flex-wrap">
+                        <div class="form-check m-0 d-flex align-items-center gap-2">
+                            <input class="form-check-input m-0" type="checkbox" id="checkSelecionarTodos" aria-label="Selecionar todos os artigos">
+                            <label class="form-check-label fw-medium text-secondary" for="checkSelecionarTodos" style="cursor: pointer;">Selecionar todos</label>
+                        </div>
+                        
+                        <div class="vr d-none d-sm-block"></div>
+                        
+                        <button type="button" class="btn btn-link text-decoration-none toolbar-btn d-flex align-items-center gap-2" aria-label="Organizar artigos selecionados">
+                            <i class="bi bi-folder-plus" aria-hidden="true"></i> <span class="d-none d-sm-inline">Organizar</span>
+                        </button>
+                        <button type="button" id="btnExcluirLote" class="btn btn-link text-decoration-none toolbar-btn text-danger d-flex align-items-center gap-2" aria-label="Excluir artigos selecionados">
+                            <i class="bi bi-trash" aria-hidden="true"></i> <span class="d-none d-sm-inline">Excluir</span>
+                        </button>
+                    </div>
+
+                    <div class="d-flex align-items-center gap-2">
+                        <select class="form-select form-select-sm border-0 bg-transparent fw-medium text-secondary" aria-label="Ordenar por">
+                            <option value="recentes" selected>Mais recentes</option>
+                            <option value="antigos">Mais antigos</option>
+                            <option value="az">Ordem alfabética</option>
+                        </select>
+                    </div>
+                </div>
+
+                <section id="listaArtigos" aria-label="Lista de artigos salvos">
+                    
+                    <article class="article-list-item p-3 d-flex gap-3 align-items-start">
+                        <div class="form-check mt-1">
+                            <input class="form-check-input check-artigo" type="checkbox" aria-label="Selecionar artigo 1">
+                        </div>
+                        <div class="flex-grow-1 min-w-0">
+                            <h3 class="fs-6 fw-bold mb-1 text-truncate">
+                                <a href="artigo.html" class="text-decoration-none text-dark">Information literacy in school: a systematic review</a>
+                            </h3>
+                            <p class="text-secondary small mb-2 text-truncate">Ciência da Informação, <time datetime="2024">2024</time>, v.53</p>
+                            <span class="badge badge-open-access rounded-pill"><i class="bi bi-unlock-fill" aria-hidden="true"></i> ACESSO ABERTO</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-2 flex-shrink-0">
+                            <a href="#" class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1 border-0 fw-medium text-dark bg-light" aria-label="Baixar PDF"><i class="bi bi-file-earmark-pdf text-danger" aria-hidden="true"></i> <span class="d-none d-md-inline">PDF</span></a>
+                            <button class="btn btn-light btn-sm text-secondary" aria-label="Mais opções"><i class="bi bi-three-dots" aria-hidden="true"></i></button>
+                        </div>
+                    </article>
+
+                    <article class="article-list-item p-3 d-flex gap-3 align-items-start">
+                        <div class="form-check mt-1">
+                            <input class="form-check-input check-artigo" type="checkbox" aria-label="Selecionar artigo 2">
+                        </div>
+                        <div class="flex-grow-1 min-w-0">
+                            <h3 class="fs-6 fw-bold mb-1 text-truncate">
+                                <a href="#" class="text-decoration-none text-dark">Information and communication technologies in schools: impacts and challenges</a>
+                            </h3>
+                            <p class="text-secondary small mb-2 text-truncate">Educação & Sociedade, <time datetime="2023">2023</time>, v.44</p>
+                            </div>
+                        <div class="d-flex align-items-center gap-2 flex-shrink-0">
+                            <a href="#" class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1 border-0 fw-medium text-dark bg-light" aria-label="Baixar PDF"><i class="bi bi-file-earmark-pdf text-danger" aria-hidden="true"></i> <span class="d-none d-md-inline">PDF</span></a>
+                            <button class="btn btn-light btn-sm text-secondary" aria-label="Mais opções"><i class="bi bi-three-dots" aria-hidden="true"></i></button>
+                        </div>
+                    </article>
+
+                    <article class="article-list-item p-3 d-flex gap-3 align-items-start">
+                        <div class="form-check mt-1">
+                            <input class="form-check-input check-artigo" type="checkbox" aria-label="Selecionar artigo 3">
+                        </div>
+                        <div class="flex-grow-1 min-w-0">
+                            <h3 class="fs-6 fw-bold mb-1 text-truncate">
+                                <a href="#" class="text-decoration-none text-dark">School libraries and information access: perspectives from Latin America</a>
+                            </h3>
+                            <p class="text-secondary small mb-2 text-truncate">Transinformação, <time datetime="2023">2023</time>, v.35</p>
+                            <span class="badge badge-open-access rounded-pill"><i class="bi bi-unlock-fill" aria-hidden="true"></i> ACESSO ABERTO</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-2 flex-shrink-0">
+                            <a href="#" class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1 border-0 fw-medium text-dark bg-light" aria-label="Baixar PDF"><i class="bi bi-file-earmark-pdf text-danger" aria-hidden="true"></i> <span class="d-none d-md-inline">PDF</span></a>
+                            <button class="btn btn-light btn-sm text-secondary" aria-label="Mais opções"><i class="bi bi-three-dots" aria-hidden="true"></i></button>
+                        </div>
+                    </article>
+
+                </section>
+                
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            const checkTodos = document.getElementById('checkSelecionarTodos');
+            const checksArtigos = document.querySelectorAll('.check-artigo');
+            const btnExcluir = document.getElementById('btnExcluirLote');
+            const listaArtigos = document.getElementById('listaArtigos');
+            const contadorTexto = document.getElementById('contadorArtigos');
+
+            // 1. Função de Atualizar Contador de Artigos
+            const atualizarContador = () => {
+                const total = listaArtigos.querySelectorAll('article').length;
+                if(total === 0) {
+                    contadorTexto.innerText = "Nenhum artigo salvo";
+                    listaArtigos.innerHTML = `<div class="text-center py-5 text-muted"><i class="bi bi-journal-x fs-1"></i><p class="mt-2">Sua biblioteca está vazia.</p></div>`;
+                    checkTodos.disabled = true;
+                } else {
+                    contadorTexto.innerText = total === 1 ? "1 artigo" : `${total} artigos`;
+                }
+            };
+
+            // 2. Lógica "Selecionar Todos"
+            checkTodos.addEventListener('change', (e) => {
+                const isChecked = e.target.checked;
+                
+                // Pega a lista atualizada de checkboxes caso algum tenha sido deletado
+                const checkboxesAtuais = listaArtigos.querySelectorAll('.check-artigo');
+                
+                checkboxesAtuais.forEach(check => {
+                    check.checked = isChecked;
+                    // Adiciona ou remove a classe 'selected' no <article> pai para dar destaque visual (fundo azul)
+                    const artigoCard = check.closest('article');
+                    if (isChecked) {
+                        artigoCard.classList.add('selected');
+                    } else {
+                        artigoCard.classList.remove('selected');
+                    }
+                });
+            });
+
+            // 3. Lógica Individual de Seleção (pintar o fundo de azul)
+            listaArtigos.addEventListener('change', (e) => {
+                if (e.target.classList.contains('check-artigo')) {
+                    const artigoCard = e.target.closest('article');
+                    if (e.target.checked) {
+                        artigoCard.classList.add('selected');
+                    } else {
+                        artigoCard.classList.remove('selected');
+                        // Se desmarcou um, desmarca o "Selecionar todos" do topo
+                        checkTodos.checked = false;
+                    }
+                }
+            });
+
+            // 4. Lógica de Exclusão Dinâmica
+            btnExcluir.addEventListener('click', () => {
+                const checkboxesAtuais = listaArtigos.querySelectorAll('.check-artigo:checked');
+                
+                if (checkboxesAtuais.length === 0) {
+                    alert("Selecione pelo menos um artigo para excluir.");
+                    return;
+                }
+
+                // Confirmação simples
+                if (confirm(`Tem certeza que deseja remover ${checkboxesAtuais.length} artigo(s) da sua biblioteca?`)) {
+                    checkboxesAtuais.forEach(check => {
+                        const artigoCard = check.closest('article');
+                        // Remove o <article> do HTML (DOM)
+                        artigoCard.remove();
+                    });
+                    
+                    // Desmarca o "Selecionar todos"
+                    checkTodos.checked = false;
+                    
+                    // Atualiza o texto "X artigos"
+                    atualizarContador();
+                }
+            });
+
+        });
+    </script>
+    <script src="components.js"></script>
+</body>
+</html>
