@@ -7,7 +7,7 @@
 
 Projeto de Redesign de Interface desenvolvido para a disciplina de **Internet IV**. O objetivo principal foi reconstruir as principais páginas da plataforma **SciELO (Scientific Electronic Library Online)**, tornando a experiência de busca, leitura e gerenciamento de artigos científicos mais intuitiva, moderna, responsiva e inteligente.
 
-Acesse o site através deste link: ![Link do Redesign](https://carlabsab.github.io/scieloredesign/)
+Acesse o site através deste link: [https://carlabsab.github.io/scieloredesign/]
 
 ---
 
