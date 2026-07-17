@@ -56,8 +56,8 @@ O repositório foi organizado seguindo as boas práticas de desenvolvimento web,
 * **Depois:** Uso de linhas de grid responsivas (`row g-3 align-items-center`) organizadas em blocos semânticos (`fieldset`). Inclusão de um botão dinâmico assistido por JavaScript para inserção fluida de novas regras visuais.
 
 | Interface Original (Antes) | Nova Interface Redesenhada (Depois) |
-| --- | --- |
-|  |  |
+| :---: | :---: |
+| ![Filtros Antes](filtros-antes.png) | ![Filtros Depois](filtros-avancados.png) |
 
 > **Justificativa de UI/UX:** Alinhamento perfeito dos campos de seleção e inputs, garantindo consistência visual e permitindo que o usuário monte buscas complexas sem perder o rastro visual dos operadores lógicos.
 
@@ -70,7 +70,7 @@ O repositório foi organizado seguindo as boas práticas de desenvolvimento web,
 
 | Interface Original (Antes) | Nova Interface Redesenhada (Depois) |
 | --- | --- |
-|  |  |
+| ![Resultados Antes](resultados-antes.png) | ![Resultados de buscas](resultados.png) |
 
 > **Justificativa de UI/UX:** Os badges coloridos utilitários (ex: `badge-open-access`) destacam o status do artigo imediatamente. A divisão por cards limpos melhora a escaneabilidade da página.
 
@@ -83,7 +83,7 @@ O repositório foi organizado seguindo as boas práticas de desenvolvimento web,
 
 | Interface Original (Antes) | Nova Interface Redesenhada (Depois) |
 | --- | --- |
-|  |  |
+| ![Artigo Antes](artigo-antes.png) | ![Artigo Depois](artigo.png) |
 
 > **Justificativa de UI/UX:** Aumento do espaçamento entrelinhas (`line-height: 1.8`) para evitar a fadiga ocular. Ferramentas críticas (PDF, XML, Citar) foram promovidas para uma barra de ações rápidas no topo da página.
 
@@ -96,7 +96,7 @@ O repositório foi organizado seguindo as boas práticas de desenvolvimento web,
 
 | Interface Original (Antes) | Nova Interface Redesenhada (Depois) |
 | --- | --- |
-|  |  |
+| ![Periódicos Antes](periodicos-antes.png) | ![Minha Biblioteca](biblioteca.png) |
 
 > **Justificativa de UI/UX:** Eliminação de elementos duplicados no layout e correção dos containers estruturais. O redesenho foca no controle do usuário sobre seus dados salvos através de uma lista limpa e interativa.
 
